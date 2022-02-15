@@ -26,8 +26,10 @@ def generating_fourier_state(n_qubits, m):
         """This is the quantum circuit that we will use."""
 
         # QHACK #
-
         # Add the template of the statement with the angles passed as an argument.
+        for i in range(n_qubits):
+            qml.Hadamard(wires=i)
+            qml.RZ(angles[i], wires=i)
 
         # QHACK #
 
@@ -44,10 +46,29 @@ def generating_fourier_state(n_qubits, m):
         """
 
         probs = circuit(angles)
+
         # QHACK #
 
         # The return error should be smaller when the state m is more likely to be obtained.
+        ### take probability output and get absolute distance from 'm'
+        loss = 0.0
+        temp = format(m, "b")
+        # building prob_ideal array, reversing order to match qubit order
+        prob_ideal = []
+        for i in reversed(range(n_qubits)):
+            if temp[i] == "1":
+                prob_ideal.append(1)
+                prob_ideal.append(0)
+            else:
+                prob_ideal.append(0)
+                prob_ideal.append(1)
 
+        # m=11, which means probs should be [1 0 1 0] for perfect match
+        for i in range(n_qubits * 2):
+            print("Test: ", prob_ideal[i], probs[i]._value, abs(prob_ideal[i] - probs[i]))
+            loss += abs(prob_ideal[i] - probs[i])
+        print(angles)
+        return loss
         # QHACK #
 
     # This subroutine will find the angles that minimize the error function.

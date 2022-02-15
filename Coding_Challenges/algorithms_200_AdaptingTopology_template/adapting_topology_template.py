@@ -29,7 +29,28 @@ def n_swaps(cnot):
     """
 
     # QHACK #
+    # https://www.geeksforgeeks.org/building-an-undirected-graph-and-finding-shortest-path-using-dictionaries-in-python/
+    start = cnot.wires[0]
+    goal = cnot.wires[1]
+    seen = []
+    Q = [[start]]
 
+    while Q:
+        path = Q.pop(0)
+        vertex = path[-1]
+
+        if vertex not in seen:
+            neighbours = graph[vertex]
+
+            for neighbour in neighbours:
+                new_path = list(path)
+                new_path.append(neighbour)
+                Q.append(new_path)
+
+                if neighbour == goal:
+                    middles_nodes = len(new_path) - 2  # remove start and goal
+                    return middles_nodes * 2  # need to flip before and after
+            seen.append(vertex)
     # QHACK #
 
 

@@ -51,6 +51,7 @@ def circuit(p, alpha, tampered_wire):
     # QHACK #
 
     # put any input processing gates here
+    print(tampered_wire)
 
     qml.BitFlip(p, wires=int(tampered_wire))
 
